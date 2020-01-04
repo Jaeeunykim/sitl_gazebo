@@ -547,6 +547,8 @@
     <plugin name="gps_plugin" filename="libgazebo_gps_plugin.so">
         <robotNamespace></robotNamespace>
         <gpsNoise>true</gpsNoise>
+        <homeLatitude>47.343609</homeLatitude>
+        <homeLongitude>8.541391</homeLongitude>
     </plugin>
     <plugin name='magnetometer_plugin' filename='libgazebo_magnetometer_plugin.so'>
       <robotNamespace/>
