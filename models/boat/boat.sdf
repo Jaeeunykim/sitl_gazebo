@@ -320,7 +320,7 @@
         </geometry>
       </visual>
     </link>
-    <joint name='left_chasis_engine_joint' type='revolute'>
+    <joint name='left_chasis_engine_joint' type='fixed'>
       <child>left_engine_link</child>
       <parent>base_link</parent>
       <axis>
@@ -373,7 +373,7 @@
     </link>
     <joint name='left_engine_propeller_joint' type='revolute'>
       <child>left_propeller_link</child>
-      <parent>left_engine_link</parent>
+      <parent>base_link</parent>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -429,7 +429,7 @@
         </geometry>
       </visual>
     </link>
-    <joint name='right_chasis_engine_joint' type='revolute'>
+    <joint name='right_chasis_engine_joint' type='fixed'>
       <child>right_engine_link</child>
       <parent>base_link</parent>
       <axis>
@@ -497,7 +497,7 @@
     </link>
     <joint name='right_engine_propeller_joint' type='revolute'>
       <child>right_propeller_link</child>
-      <parent>right_engine_link</parent>
+      <parent>base_link</parent>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -562,6 +562,40 @@
       <baroTopic>/baro</baroTopic>
     </plugin>
     <static>0</static>
+    <plugin name='left_motor_model' filename='libgazebo_motor_model.so'>
+      <robotNamespace></robotNamespace>
+      <jointName>left_engine_propeller_joint</jointName>
+      <linkName>left_propeller_link</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1100</maxRotVelocity>
+      <motorConstant>8.54858e-03</motorConstant>
+      <momentConstant>0.06</momentConstant>
+      <commandSubTopic>/gazebo/command/motor_speed</commandSubTopic>
+      <motorNumber>0</motorNumber>
+      <rotorDragCoefficient>0.000806428</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <motorSpeedPubTopic>/motor_speed/0</motorSpeedPubTopic>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+    </plugin>
+    <plugin name='left_motor_model' filename='libgazebo_motor_model.so'>
+      <robotNamespace></robotNamespace>
+      <jointName>right_engine_propeller_joint</jointName>
+      <linkName>right_propeller_link</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantDown>0.025</timeConstantDown>
+      <maxRotVelocity>1100</maxRotVelocity>
+      <motorConstant>8.54858e-03</motorConstant>
+      <momentConstant>0.06</momentConstant>
+      <commandSubTopic>/gazebo/command/motor_speed</commandSubTopic>
+      <motorNumber>1</motorNumber>
+      <rotorDragCoefficient>0.000806428</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <motorSpeedPubTopic>/motor_speed/1</motorSpeedPubTopic>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+    </plugin>
     <plugin name='usv_dynamics_wamv_dynamics_plugin' filename='libgazebo_usv_dynamics_plugin.so'>
       <bodyName>base_link</bodyName>
       <waterLevel>0</waterLevel>
@@ -606,22 +640,22 @@
       <motorSpeedCommandPubTopic>/gazebo/command/motor_speed</motorSpeedCommandPubTopic>
       <control_channels>
         <channel name="left_rotor">
-          <input_index>4</input_index>
+          <input_index>0</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>3500</input_scaling>
+          <input_scaling>100</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
-          <joint_name>rotor_puller_joint</joint_name>
+          <joint_name>left_engine_propeller_joint</joint_name>
         </channel>
         <channel name="right_rotor">
-          <input_index>4</input_index>
+          <input_index>1</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>3500</input_scaling>
+          <input_scaling>100</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
-          <joint_name>rotor_puller_joint</joint_name>
+          <joint_name>right_engine_propeller_joint</joint_name>
         </channel>
       </control_channels>
     </plugin>

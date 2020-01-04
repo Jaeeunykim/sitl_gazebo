@@ -194,7 +194,7 @@ void UsvDynamicsPlugin::Update()
     const ignition::math::Vector3d kVelLinearBody =
       this->link->GetRelativeLinearVel().Ign();
   #endif
-  gzdbg << "Vel linear: " << kVelLinearBody;
+  // gzdbg << "Vel linear: " << kVelLinearBody;
 
   #if GAZEBO_MAJOR_VERSION >= 8
     const ignition::math::Vector3d kVelAngularBody =
@@ -203,7 +203,7 @@ void UsvDynamicsPlugin::Update()
     const ignition::math::Vector3d kVelAngularBody =
       this->link->GetRelativeAngularVel().Ign();
   #endif
-  gzdbg << "Vel angular: " << kVelAngularBody;
+  // gzdbg << "Vel angular: " << kVelAngularBody;
 
   // Estimate the linear and angular accelerations.
   // Note the the GetRelativeLinearAccel() and AngularAccel() functions
@@ -211,11 +211,11 @@ void UsvDynamicsPlugin::Update()
   const ignition::math::Vector3d kAccelLinearBody =
     (kVelLinearBody - this->prevLinVel) / dt;
   this->prevLinVel = kVelLinearBody;
-  gzdbg << "Accel linear: " << kAccelLinearBody;
+  // gzdbg << "Accel linear: " << kAccelLinearBody;
   const ignition::math::Vector3d kAccelAngularBody =
     (kVelAngularBody - this->prevAngVel) / dt;
   this->prevAngVel = kVelAngularBody;
-  gzdbg << "Accel angular: " << kAccelAngularBody;
+  // gzdbg << "Accel angular: " << kAccelAngularBody;
 
   // Create state and derivative of state (accelerations)
   Eigen::VectorXd stateDot = Eigen::VectorXd(6);
@@ -231,8 +231,8 @@ void UsvDynamicsPlugin::Update()
 
   // Added Mass
   const Eigen::VectorXd kAmassVec = -1.0 * this->Ma * stateDot;
-  gzdbg << "stateDot: \n" << stateDot;
-  gzdbg << "amassVec :\n" << kAmassVec;
+  // gzdbg << "stateDot: \n" << stateDot;
+  // gzdbg << "amassVec :\n" << kAmassVec;
 
   // Coriolis - added mass components
   Cmat(0, 5) = this->paramYdotV * kVelLinearBody.Y();
@@ -247,9 +247,9 @@ void UsvDynamicsPlugin::Update()
   Dmat(3, 3) = this->paramKp;
   Dmat(4, 4) = this->paramMq;
   Dmat(5, 5) = this->paramNr + this->paramNrr * std::abs(kVelAngularBody.Z());
-  gzdbg << "Dmat :\n" << Dmat;
+  // gzdbg << "Dmat :\n" << Dmat;
   const Eigen::VectorXd kDvec = -1.0 * Dmat * state;
-  gzdbg << "Dvec :\n" << kDvec;
+  // gzdbg << "Dvec :\n" << kDvec;
 
   // Vehicle frame transform
   ignition::math::Quaterniond vq(kEuler.X(), kEuler.Y(), kEuler.Z());
@@ -259,7 +259,7 @@ void UsvDynamicsPlugin::Update()
   const Eigen::VectorXd kForceSum = kAmassVec + kDvec;
 
   // Forces in fixed frame
-  gzdbg << "forceSum :\n" << kForceSum;
+  // gzdbg << "forceSum :\n" << kForceSum;
 
   // Add dynamic forces/torques to link at CG
   this->link->AddRelativeForce(
@@ -287,16 +287,16 @@ void UsvDynamicsPlugin::Update()
       bpntW = xformV * bpnt;
 
       // Debug
-      gzdbg << "[" << ii << "," << jj <<
-          "] grid points" << bpnt.X() << "," << bpnt.Y() << "," << bpnt.Z();
-      gzdbg << "v frame euler " << kEuler;
-      gzdbg << "in water frame" << bpntW.Z() << "," <<
-          bpntW.Y() << "," << bpntW.Z();
+      // gzdbg << "[" << ii << "," << jj <<
+          // "] grid points" << bpnt.X() << "," << bpnt.Y() << "," << bpnt.Z();
+      // gzdbg << "v frame euler " << kEuler;
+      // gzdbg << "in water frame" << bpntW.Z() << "," <<
+          // bpntW.Y() << "," << bpntW.Z();
 
       // Vertical location of boat grid point in world frame
       const float kDdz = kPose.Pos().Z() + bpntW.Z();
-      gzdbg << "Z, pose: " << kPose.Pos().Z() << ", bpnt: "
-        << bpntW.Z() << ", dd: " << kDdz;
+      // gzdbg << "Z, pose: " << kPose.Pos().Z() << ", bpnt: "
+        // << bpntW.Z() << ", dd: " << kDdz;
 
       // Find vertical displacement of wave field
       // World location of grid point
@@ -323,7 +323,7 @@ void UsvDynamicsPlugin::Update()
       const float kBuoyForce = CircleSegment(this->paramHullRadius, deltaZ) *
         this->paramBoatLength/(static_cast<float>(this->paramLengthN)) *
         GRAVITY * this->waterDensity;
-      gzdbg << "buoyForce: " << kBuoyForce;
+      // gzdbg << "buoyForce: " << kBuoyForce;
 
       // Apply force at grid point
       // From web, Appears that position is in the link frame
